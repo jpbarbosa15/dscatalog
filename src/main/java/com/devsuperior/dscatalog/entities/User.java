@@ -1,6 +1,7 @@
 package com.devsuperior.dscatalog.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.io.Serializable;
 import java.util.HashSet;
