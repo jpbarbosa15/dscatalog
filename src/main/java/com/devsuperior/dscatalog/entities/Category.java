@@ -76,7 +76,4 @@ public class Category implements Serializable {
         return Objects.hash(id, name);
     }
 
-    public void  testMethod (){
-        System.out.println("Test method");
-    }
 }
