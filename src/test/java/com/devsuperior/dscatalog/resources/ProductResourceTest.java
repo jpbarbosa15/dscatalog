@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
@@ -25,7 +27,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ProductResource.class)
+
+@WebMvcTest(value = ProductResource.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
+@AutoConfigureMockMvc(addFilters = false)
 class ProductResourceTest {
     @Autowired
     private MockMvc mockMvc;
@@ -43,6 +47,9 @@ class ProductResourceTest {
         nonExistingID = 2L;
 
         productDTO = new ProductDTO();
+        productDTO.setName("Computer");
+        productDTO.setPrice(2000.0);
+        productDTO.setDescription("Descriçao teste");
         page = new PageImpl<>(List.of(productDTO));
         when(service.findAllPaged(any())).thenReturn(page);
 

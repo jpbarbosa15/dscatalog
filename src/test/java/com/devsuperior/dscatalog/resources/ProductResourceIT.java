@@ -1,6 +1,7 @@
 package com.devsuperior.dscatalog.resources;
 
 import com.devsuperior.dscatalog.dto.ProductDTO;
+import com.devsuperior.dscatalog.test.TokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,16 +26,32 @@ public class ProductResourceIT {
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private TokenUtil tokenUtil;
 
     private Long existingId;
     private Long nonExistingId;
     private Long countTotalProducts;
+    private String username;
+    private String password;
+    private String bearerToken;
+    private ProductDTO productDTO;
 
     @BeforeEach
     void SetUp()throws Exception {
+        username = "maria@gmail.com";
+        password = "123456";
+
+        bearerToken = tokenUtil.obtainAccessToken(mockMvc, username, password);
+
         existingId = 1L;
         nonExistingId = 1000L;
         countTotalProducts = 25L;
+
+        productDTO = new ProductDTO();
+        productDTO.setName("Computer");
+        productDTO.setPrice(2000.0);
+        productDTO.setDescription("Descriçao teste");
     }
 
     @Test
@@ -49,13 +66,13 @@ public class ProductResourceIT {
 
     @Test
     public void updateShouldReturnProductDTOWhenIdExists() throws Exception{
-        ProductDTO productDTO = new ProductDTO();
-        productDTO.setName("Computador");
+
         String expectedName = productDTO.getName();
 
         String jsonBody = objectMapper.writeValueAsString(productDTO);
 
         ResultActions result =  mockMvc.perform(put("/products/{id}",existingId)
+                .header("Authorization", "Bearer " + bearerToken)
                 .content(jsonBody)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
@@ -67,11 +84,12 @@ public class ProductResourceIT {
 
     @Test
     public void updateShouldReturnNotFoundWhenIdDoesNotExists() throws Exception{
-        ProductDTO productDTO = new ProductDTO();
+
 
         String jsonBody = objectMapper.writeValueAsString(productDTO);
 
         ResultActions result =  mockMvc.perform(put("/products/{id}",nonExistingId)
+                .header("Authorization", "Bearer " + bearerToken)
                 .content(jsonBody)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
