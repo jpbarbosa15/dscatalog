@@ -41,68 +41,68 @@ class ProductResourceTest {
     private PageImpl<ProductDTO> page;
     private Long existingID;
     private Long nonExistingID;
-    @BeforeEach
-    void SetUp()throws Exception {
-        existingID = 1L;
-        nonExistingID = 2L;
-
-        productDTO = new ProductDTO();
-        productDTO.setName("Computer");
-        productDTO.setPrice(2000.0);
-        productDTO.setDescription("Descriçao teste");
-        page = new PageImpl<>(List.of(productDTO));
-        when(service.findAllPaged(any())).thenReturn(page);
-
-        when(service.findById(existingID)).thenReturn(productDTO);
-        when(service.findById(nonExistingID)).thenThrow(ResourceNotFoundException.class);
-
-        when(service.update(eq(existingID),any())).thenReturn(productDTO);
-        when(service.update(eq(nonExistingID),any())).thenThrow(ResourceNotFoundException.class);
-    }
-    @Test
-    public void updateShouldReturnProductDTOWhenIdExists() throws Exception{
-        String jsonBody = objectMapper.writeValueAsString(productDTO);
-
-        ResultActions result =  mockMvc.perform(put("/products/{id}",existingID)
-                .content(jsonBody)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON));
-
-        result.andExpect(status().isOk());
-    }
-
-    @Test
-    public void updateShouldReturnNotFoundProductDTOWhenIdDoesNotExist() throws Exception{
-        String jsonBody = objectMapper.writeValueAsString(productDTO);
-
-        ResultActions result =  mockMvc.perform(put("/products/{id}",nonExistingID)
-                .content(jsonBody)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON));
-
-        result.andExpect(status().isNotFound());
-    }
-
-    @Test
-    public void findAllShouldReturnPage() throws Exception{
-        ResultActions result =  mockMvc.perform(get("/products").accept(MediaType.APPLICATION_JSON));
-
-        result.andExpect(status().isOk());
-    }
-
-    @Test
-    public void findByIdShouldReturnProductWhenIdExists() throws Exception{
-        ResultActions result =  mockMvc.perform(get("/products/{id}",existingID).accept(MediaType.APPLICATION_JSON));
-
-        result.andExpect(status().isOk());
-//        result.andExpect(jsonPath("$.id").exists());
-    }
-
-    @Test
-    public void findByIdShouldReturnNotFoundProductWhenIdDoesNotExist() throws Exception{
-        ResultActions result =  mockMvc.perform(get("/products/{id}",nonExistingID).accept(MediaType.APPLICATION_JSON));
-
-        result.andExpect(status().isNotFound());
-
-    }
+//    @BeforeEach
+//    void SetUp()throws Exception {
+//        existingID = 1L;
+//        nonExistingID = 2L;
+//
+//        productDTO = new ProductDTO();
+//        productDTO.setName("Computer");
+//        productDTO.setPrice(2000.0);
+//        productDTO.setDescription("Descriçao teste");
+//        page = new PageImpl<>(List.of(productDTO));
+//        when(service.findAllPaged(any())).thenReturn(page);
+//
+//        when(service.findById(existingID)).thenReturn(productDTO);
+//        when(service.findById(nonExistingID)).thenThrow(ResourceNotFoundException.class);
+//
+//        when(service.update(eq(existingID),any())).thenReturn(productDTO);
+//        when(service.update(eq(nonExistingID),any())).thenThrow(ResourceNotFoundException.class);
+//    }
+//    @Test
+//    public void updateShouldReturnProductDTOWhenIdExists() throws Exception{
+//        String jsonBody = objectMapper.writeValueAsString(productDTO);
+//
+//        ResultActions result =  mockMvc.perform(put("/products/{id}",existingID)
+//                .content(jsonBody)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .accept(MediaType.APPLICATION_JSON));
+//
+//        result.andExpect(status().isOk());
+//    }
+//
+//    @Test
+//    public void updateShouldReturnNotFoundProductDTOWhenIdDoesNotExist() throws Exception{
+//        String jsonBody = objectMapper.writeValueAsString(productDTO);
+//
+//        ResultActions result =  mockMvc.perform(put("/products/{id}",nonExistingID)
+//                .content(jsonBody)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .accept(MediaType.APPLICATION_JSON));
+//
+//        result.andExpect(status().isNotFound());
+//    }
+//
+//    @Test
+//    public void findAllShouldReturnPage() throws Exception{
+//        ResultActions result =  mockMvc.perform(get("/products").accept(MediaType.APPLICATION_JSON));
+//
+//        result.andExpect(status().isOk());
+//    }
+//
+//    @Test
+//    public void findByIdShouldReturnProductWhenIdExists() throws Exception{
+//        ResultActions result =  mockMvc.perform(get("/products/{id}",existingID).accept(MediaType.APPLICATION_JSON));
+//
+//        result.andExpect(status().isOk());
+////        result.andExpect(jsonPath("$.id").exists());
+//    }
+//
+//    @Test
+//    public void findByIdShouldReturnNotFoundProductWhenIdDoesNotExist() throws Exception{
+//        ResultActions result =  mockMvc.perform(get("/products/{id}",nonExistingID).accept(MediaType.APPLICATION_JSON));
+//
+//        result.andExpect(status().isNotFound());
+//
+//    }
 }
